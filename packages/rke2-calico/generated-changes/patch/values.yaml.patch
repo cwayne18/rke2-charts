@@ -69,7 +69,7 @@
  
  # Resource requests and limits for the tigera/operator pod.
  resources: {}
-@@ -146,13 +162,32 @@
+@@ -146,13 +162,37 @@
  dnsConfig: {}
  # Image and registry configuration for the tigera/operator pod.
  tigeraOperator:
@@ -87,6 +87,11 @@
 +  systemDefaultRegistry: ""
 +  clusterCIDRv4: ""
 +  clusterCIDRv6: ""
++  # Rancher Prime: when enabled, Calico component images are sourced from the
++  # hardened rancher/hardened-calico-* images (PRIME ONLY) instead of the
++  # community rancher/mirrored-calico-* images.
++  prime:
++    enabled: false
 +
 +# Config required by Windows nodes
 +ipamConfig:

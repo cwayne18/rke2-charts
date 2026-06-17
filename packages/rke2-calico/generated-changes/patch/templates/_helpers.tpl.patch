@@ -1,18 +1,22 @@
 --- charts-original/templates/_helpers.tpl
 +++ charts/templates/_helpers.tpl
-@@ -1,9 +1,12 @@
+@@ -1,10 +1,16 @@
  {{/* generate the image name for a component*/}}
  {{- define "tigera-operator.image" -}}
 -{{- if .registry -}}
 -    {{- .registry | trimSuffix "/" -}}/
++{{- if and .Values.global.prime .Values.global.prime.enabled -}}
++{{- $_ := set .Values.tigeraOperator "image" "rancher/hardened-calico-operator" -}}
+ {{- end -}}
+-{{- .image -}}:{{- .version -}}
 +{{- if .Values.global.systemDefaultRegistry -}}
 +{{- $_ := set .Values.tigeraOperator "registry" .Values.global.systemDefaultRegistry -}}
  {{- end -}}
--{{- .image -}}:{{- .version -}}
 +{{- if .Values.tigeraOperator.registry -}}
 +    {{- .Values.tigeraOperator.registry | trimSuffix "/" -}}/
 +{{- end -}}
 +{{- .Values.tigeraOperator.image -}}:{{- .Values.tigeraOperator.version -}}
- {{- end -}}
++{{- end -}}
  
  {{/*
+ generate imagePullSecrets for installation and deployments
