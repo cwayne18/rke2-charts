@@ -5,7 +5,7 @@
        containers:
        - name: frontend
 -        image: {{ include "cilium.image" .Values.hubble.ui.frontend.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.hubble.ui.frontend.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.hubble.ui.frontend.image) }}"
          imagePullPolicy: {{ .Values.hubble.ui.frontend.image.pullPolicy }}
          ports:
          - name: http
@@ -14,7 +14,7 @@
          {{- end }}
        - name: backend
 -        image: {{ include "cilium.image" .Values.hubble.ui.backend.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.hubble.ui.backend.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.hubble.ui.backend.image) }}"
          imagePullPolicy: {{ .Values.hubble.ui.backend.image.pullPolicy }}
          env:
          - name: EVENTS_SERVER_PORT

@@ -230,7 +230,7 @@
        pullPolicy: "IfNotPresent"
      # -- TCP port for the clustermesh-apiserver health API.
      healthPort: 9880
-@@ -4438,3 +4422,11 @@
+@@ -4438,3 +4422,17 @@
      digest: ""
      useDigest: true
      pullPolicy: "IfNotPresent"
@@ -242,3 +242,9 @@
 +
 +global:
 +  systemDefaultRegistry: ""
++  # -- Rancher Prime. When enabled, Cilium component images are pulled from the
++  # hardened `rancher/hardened-cilium-*` repositories instead of the
++  # `rancher/mirrored-cilium-*` repositories. Prime only; defaults to false so
++  # community installs render identically.
++  prime:
++    enabled: false

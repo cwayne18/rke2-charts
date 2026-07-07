@@ -37,7 +37,7 @@
        containers:
        - name: cilium-agent
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          {{- if .Values.sleepAfterInit }}
          command:
@@ -46,7 +46,7 @@
        {{- if .Values.monitor.enabled }}
        - name: cilium-monitor
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          command:
          - /bin/bash
@@ -67,7 +67,7 @@
        {{- if $buildDaemonConfig }}
        - name: config
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          {{- with .Values.initResources }}
          resources:
@@ -76,7 +76,7 @@
        # We use nsenter command with host's cgroup and mount namespaces enabled.
        - name: mount-cgroup
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          env:
          - name: CGROUP_ROOT
@@ -85,7 +85,7 @@
        {{- if .Values.sysctlfix.enabled }}
        - name: apply-sysctl-overwrites
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          {{- with .Values.initResources }}
          resources:
@@ -94,7 +94,7 @@
        # only works from privileged containers.
        - name: mount-bpf-fs
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          {{- with .Values.initResources }}
          resources:
@@ -103,7 +103,7 @@
        {{- if and .Values.nodeinit.enabled .Values.nodeinit.bootstrapFile }}
        - name: wait-for-node-init
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          {{- with .Values.initResources }}
          resources:
@@ -116,7 +116,7 @@
        {{- end }}
        - name: clean-cilium-state
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          command:
          - /init-container.sh
@@ -125,7 +125,7 @@
        {{- if and .Values.waitForKubeProxy (and (ne (toString $kubeProxyReplacement) "strict") (ne (toString $kubeProxyReplacement) "true"))  }}
        - name: wait-for-kube-proxy
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          {{- with .Values.initResources }}
          resources:
@@ -134,7 +134,7 @@
        # Install the CNI binaries in an InitContainer so we don't have a writable host mount in the agent
        - name: install-cni-binaries
 -        image: {{ include "cilium.image" .Values.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image) }}"
          imagePullPolicy: {{ .Values.image.pullPolicy }}
          command:
            - "/install-plugin.sh"
