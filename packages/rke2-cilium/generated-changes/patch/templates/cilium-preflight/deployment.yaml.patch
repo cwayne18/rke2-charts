@@ -5,7 +5,7 @@
        containers:
          - name: cnp-validator
 -          image: {{ include "cilium.image" .Values.preflight.image | quote }}
-+          image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.preflight.image }}"
++          image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.preflight.image) }}"
            imagePullPolicy: {{ .Values.preflight.image.pullPolicy }}
            command: ["/bin/sh"]
            args:

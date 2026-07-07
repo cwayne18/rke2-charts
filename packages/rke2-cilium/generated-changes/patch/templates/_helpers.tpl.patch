@@ -1,6 +1,28 @@
 --- charts-original/templates/_helpers.tpl
 +++ charts/templates/_helpers.tpl
-@@ -221,3 +221,11 @@
+@@ -21,7 +21,7 @@
+   useDigest: true
+   digest: abcdefgh
+ ```
+-then `include "cilium.image" .Values.image`
++then `include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.image)`
+ will return `quay.io/cilium/cilium:v1.10.1@abcdefgh`.
+ Note that you can omit the tag by setting its value to `null` or `""` (in case
+ your container engine doesn't support specifying both the tag and digest for
+@@ -33,7 +33,11 @@
+ {{- if .override -}}
+ {{- printf "%s" .override -}}
+ {{- else -}}
+-{{- printf "%s%s%s" .repository $tag $digest -}}
++{{- $repository := .repository -}}
++{{- if and .prime .prime.enabled -}}
++{{- $repository = .repository | replace "mirrored-cilium-" "hardened-cilium-" -}}
++{{- end -}}
++{{- printf "%s%s%s" $repository $tag $digest -}}
+ {{- end -}}
+ {{- end -}}
+ 
+@@ -221,3 +225,11 @@
  {{- define "identityAllocationCRD" }}
    {{- list "crd" "doublewrite-readkvstore" "doublewrite-readcrd" | has .Values.identityAllocationMode }}
  {{- end }}

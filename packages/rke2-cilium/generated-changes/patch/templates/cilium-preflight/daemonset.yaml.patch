@@ -5,7 +5,7 @@
        initContainers:
          - name: clean-cilium-state
 -          image: {{ include "cilium.image" .Values.preflight.image | quote }}
-+          image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.preflight.image }}"
++          image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.preflight.image) }}"
            imagePullPolicy: {{ .Values.preflight.image.pullPolicy }}
            command: ["/bin/echo"]
            args:
@@ -14,7 +14,7 @@
        containers:
          - name: cilium-pre-flight-check
 -          image: {{ include "cilium.image" .Values.preflight.image | quote }}
-+          image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.preflight.image }}"
++          image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.preflight.image) }}"
            imagePullPolicy: {{ .Values.preflight.image.pullPolicy }}
            command: ["/bin/sh"]
            args:
@@ -23,7 +23,16 @@
          {{- if ne .Values.preflight.tofqdnsPreCache "" }}
          - name: cilium-pre-flight-fqdn-precache
 -          image: {{ include "cilium.image" .Values.preflight.image | quote }}
-+          image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.preflight.image }}"
++          image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.preflight.image) }}"
            imagePullPolicy: {{ .Values.preflight.image.pullPolicy }}
            name: cilium-pre-flight-fqdn-precache
            command: ["/bin/sh"]
+@@ -186,7 +186,7 @@
+         {{- end }}
+         {{- if $envoyDS }}
+         - name: cilium-pre-flight-envoy
+-          image: {{ include "cilium.image" .Values.preflight.envoy.image | quote }}
++          image: {{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.preflight.envoy.image) | quote }}
+           imagePullPolicy: {{ .Values.preflight.image.pullPolicy }}
+           command: ["/bin/sh"]
+           args:

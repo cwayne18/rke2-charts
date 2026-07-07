@@ -5,7 +5,7 @@
        initContainers:
        - name: etcd-init
 -        image: {{ include "cilium.image" .Values.clustermesh.apiserver.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.clustermesh.apiserver.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.clustermesh.apiserver.image) }}"
          imagePullPolicy: {{ .Values.clustermesh.apiserver.image.pullPolicy }}
          command:
          - /usr/bin/clustermesh-apiserver
@@ -14,7 +14,7 @@
        - name: etcd
          # The clustermesh-apiserver container image includes an etcd binary.
 -        image: {{ include "cilium.image" .Values.clustermesh.apiserver.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.clustermesh.apiserver.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.clustermesh.apiserver.image) }}"
          imagePullPolicy: {{ .Values.clustermesh.apiserver.image.pullPolicy }}
          command:
          - /usr/bin/etcd
@@ -23,7 +23,7 @@
        {{- if eq "true" (include "identityAllocationCRD" .) }}
        - name: apiserver
 -        image: {{ include "cilium.image" .Values.clustermesh.apiserver.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.clustermesh.apiserver.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.clustermesh.apiserver.image) }}"
          imagePullPolicy: {{ .Values.clustermesh.apiserver.image.pullPolicy }}
          command:
          - /usr/bin/clustermesh-apiserver
@@ -32,7 +32,7 @@
        {{- if .Values.clustermesh.apiserver.kvstoremesh.enabled }}
        - name: kvstoremesh
 -        image: {{ include "cilium.image" .Values.clustermesh.apiserver.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.clustermesh.apiserver.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.clustermesh.apiserver.image) }}"
          imagePullPolicy: {{ .Values.clustermesh.apiserver.image.pullPolicy }}
          command:
          - /usr/bin/clustermesh-apiserver

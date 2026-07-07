@@ -25,7 +25,7 @@
        containers:
        - name: cilium-envoy
 -        image: {{ include "cilium.image" .Values.envoy.image | quote }}
-+        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" .Values.envoy.image }}"
++        image: "{{ template "system_default_registry" . }}{{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.envoy.image) }}"
          imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
          command:
          - /usr/bin/cilium-envoy-starter

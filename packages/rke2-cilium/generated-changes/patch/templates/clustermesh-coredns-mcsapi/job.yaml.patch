@@ -1,0 +1,11 @@
+--- charts-original/templates/clustermesh-coredns-mcsapi/job.yaml
++++ charts/templates/clustermesh-coredns-mcsapi/job.yaml
+@@ -30,7 +30,7 @@
+     spec:
+       containers:
+         - name: autoconfig
+-          image: {{ include "cilium.image" .Values.clustermesh.apiserver.image | quote }}
++          image: {{ include "cilium.image" (merge (dict "prime" .Values.global.prime) .Values.clustermesh.apiserver.image) | quote }}
+           imagePullPolicy: {{ .Values.clustermesh.apiserver.image.pullPolicy }}
+           {{- with .Values.clustermesh.mcsapi.corednsAutoConfigure.resources }}
+           resources:
