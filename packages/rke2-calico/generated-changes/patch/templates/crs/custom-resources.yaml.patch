@@ -1,6 +1,6 @@
 --- charts-original/templates/crs/custom-resources.yaml
 +++ charts/templates/crs/custom-resources.yaml
-@@ -1,6 +1,44 @@
+@@ -1,6 +1,47 @@
  {{ if .Values.installation.enabled }}
  {{ $installSpec := omit .Values.installation "enabled" }}
 +{{ $installSpec := omit $installSpec "backend" }}
@@ -9,6 +9,9 @@
 +{{ $defaultRegistry := get $installSpec "registry" }}
 +{{ $finalRegistry := coalesce .Values.global.systemDefaultRegistry $defaultRegistry }}
 +{{ $_ := set $installSpec "registry" $finalRegistry }}
++{{ if and .Values.global.prime .Values.global.prime.enabled }}
++{{ $_ := set $installSpec "imagePrefix" "hardened-calico-" }}
++{{ end }}
 +{{ if empty .Values.installation.calicoNetwork.ipPools }}
 +{{ $calicoNetwork := get .Values.installation "calicoNetwork" }}
 +{{ if not (empty .Values.global.clusterCIDRv4) }}

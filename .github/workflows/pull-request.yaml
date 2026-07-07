@@ -16,7 +16,12 @@ jobs:
         run: sudo make pull-scripts
 
       - name: Pull in all relevant branches
-        run: git fetch origin main-source main
+        run: |
+          for branch in main-source main; do
+            if git ls-remote --exit-code --heads origin "${branch}" >/dev/null; then
+              git fetch origin "${branch}"
+            fi
+          done
       
       - name: Validate 
         run: sudo make validate
